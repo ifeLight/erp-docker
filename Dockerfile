@@ -6,6 +6,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose the port
 EXPOSE 80
+EXPOSE 443
 
 # Start the server
 CMD ["nginx", "-g", "daemon off;"]

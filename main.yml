@@ -184,11 +184,29 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     deploy:
       restart_policy:
         condition: on-failure
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - certbot-www:/var/www/certbot:ro
+      - certbot-conf:/etc/nginx/ssl/:ro
+    depends_on:
+      - frontend
+      - configurator
+      - create-site
+  
+  certbot:
+    image: certbot/certbot
+    deploy:
+      restart_policy:
+        condition: none
+    volumes:
+      - certbot-conf:/etc/letsencrypt:rw
+      - certbot-www:/var/www/certbot:rw
 
 volumes:
   db-data:
@@ -196,3 +214,5 @@ volumes:
   redis-cache-data:
   sites:
   logs:
+  certbot-www:
+  certbot-conf:
